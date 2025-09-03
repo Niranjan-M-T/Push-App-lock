@@ -2,7 +2,11 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from PIL import Image, ImageTk
 import cv2
+
 from pushup_counter import PushupCounter
+
+import pushup_counter as pc
+
 
 class PushupCounterApp:
     def __init__(self, root):
@@ -12,14 +16,14 @@ class PushupCounterApp:
         self.video_path = None
         self.cap = None
         self.processing = False
-        self.frame_count = 0
-        self.last_processed_frame = None
+
 
         # Instantiate the counter
         self.pushup_counter = PushupCounter()
 
         # --- GUI Variables ---
         # Thresholds
+
         self.elbow_down_thresh = tk.DoubleVar(value=115)
         self.elbow_up_thresh = tk.DoubleVar(value=172)
         self.shoulder_down_thresh = tk.DoubleVar(value=90)
@@ -27,6 +31,7 @@ class PushupCounterApp:
         self.confidence_thresh = tk.DoubleVar(value=0.5)
         # Performance
         self.frame_skip = tk.IntVar(value=1) # Process every 1 frame by default
+
 
         # Create GUI elements
         self.create_widgets()
@@ -82,6 +87,7 @@ class PushupCounterApp:
         tk.Scale(threshold_frame, from_=0, to=180, orient=tk.HORIZONTAL, variable=self.shoulder_down_thresh).grid(row=3, column=1, padx=5, pady=3)
         tk.Label(threshold_frame, text="Shoulder Up (<):").grid(row=4, column=0, padx=5, pady=3, sticky='w')
         tk.Scale(threshold_frame, from_=0, to=180, orient=tk.HORIZONTAL, variable=self.shoulder_up_thresh).grid(row=4, column=1, padx=5, pady=3)
+
         tk.Label(threshold_frame, text="Pose Confidence (>):").grid(row=5, column=0, padx=5, pady=3, sticky='w')
         tk.Scale(threshold_frame, from_=0.0, to=1.0, resolution=0.05, orient=tk.HORIZONTAL, variable=self.confidence_thresh).grid(row=5, column=1, padx=5, pady=3)
 
@@ -92,6 +98,7 @@ class PushupCounterApp:
             self.pushup_counter.reset()
             self.counter_label.config(text=f"Push-ups: {self.pushup_counter.counter}")
             self.status_label.config(text=f"Status: {self.pushup_counter.status}")
+
 
             self.cap = cv2.VideoCapture(self.video_path)
             if not self.cap.isOpened():
@@ -126,6 +133,7 @@ class PushupCounterApp:
                 self.pushup_counter.reset()
             self.frame_count = 0
             self.last_processed_frame = None
+
             self.update_frame()
 
     def stop_processing(self):
@@ -168,6 +176,7 @@ class PushupCounterApp:
             else:
                 self.stop_processing()
                 self.show_first_frame()
+
 
 if __name__ == "__main__":
     root = tk.Tk()
